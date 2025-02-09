@@ -5,6 +5,7 @@ function App() {
 
   let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬 독학']);
   let [따봉, 따봉변경] = useState([0, 0, 0])
+  let [modal, setModal] = useState(false);
 
 
   // let [a, b] = useState('oooo');
@@ -25,13 +26,36 @@ function App() {
     -> 따라서 스프레드문법[...]은 변수의 주소를 변경함
     --> 변수의 주소자체를 변경해줘야 state가 변경됨
     --> state가 array/object이면 독립적 카피본(shallow copy)을 만들어 수정해야함
-   */
 
-  /* 
+
     일반 변수는 html에 바로 반영 X
     state 변수는 해당 변수가 포함되어있는 html 모두 재렌더링 되어 반영
     --> 자주 변경될 것 같은 html을 state로 만들어두면 좋다(빡대가리식)
-   */
+
+
+    컴포넌트 만들기
+    1. function생성
+    2. return()안에 html담기
+    3. <함수명></함수명>쓰기
+
+    컴포넌트로 만들면 좋은것
+    -> 반복적인 html 축약할 때
+    -> 큰 페이지들
+    -> 자주 변경되는 것들
+
+
+    동적인 UI 만들기
+    1. html css로 미리 디자인 완성
+    2. UI의 현재상태를 state로 저장
+    3. state에 따라 UI가 어떻게 보일지 작성
+
+
+    map함수
+    1. array의 요소 갯수만큼 콜백함수를 실행시켜줌
+    2. 함수의 parameter는 array의 각 요소임
+    3. return에 적으면 array로 담아줌
+    -> 반복문으로 html 생성하면 key={} 추가 필요
+  */
   return (
     <div className="App">
       <div className="black-nav">
@@ -53,7 +77,8 @@ function App() {
 
       {글제목.map((title, i) => (
         <div className="list" key={i}>
-          <h4>{title} <span onClick={()=>{
+          <h4 onClick={()=>{ setModal(!modal) }}
+          style={{"cursor": "pointer"}}>{title} <span onClick={()=>{
             let copy = [...따봉];
             copy[i] = copy[i]+1
             따봉변경(copy)
@@ -62,8 +87,25 @@ function App() {
         </div>
         ))
       }
+
+      {
+        modal == true ? <Modal/> : null
+      }
+
     </div>
   )
 }
+
+function Modal(){
+  return(
+    // <></> fragment문법
+    <div className="modal">
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  );
+}
+
 
 export default App
