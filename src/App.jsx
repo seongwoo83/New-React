@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import './App.css'
 
@@ -6,6 +7,7 @@ function App() {
   let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬 독학']);
   let [따봉, 따봉변경] = useState([0, 0, 0])
   let [modal, setModal] = useState(false);
+  let [index, setIndex] = useState(0);
 
 
   // let [a, b] = useState('oooo');
@@ -55,6 +57,11 @@ function App() {
     2. 함수의 parameter는 array의 각 요소임
     3. return에 적으면 array로 담아줌
     -> 반복문으로 html 생성하면 key={} 추가 필요
+
+    부모 -> 자식 state 전송
+    1. <자식컴포넌트 작명={state이름}>
+    --> props 전송은 부모에서 자식으로만 가능
+
   */
   return (
     <div className="App">
@@ -62,47 +69,58 @@ function App() {
         <h4>ReactBlog</h4>
       </div>
 
-      <button onClick={()=>{
-        let copy = [...글제목];
-        copy.sort((a, b)=> a.localeCompare(b))
-        글제목변경(copy)
-      }}>가나다순 정렬</button>
-
-
-      <button onClick={()=>{
-        let copy = [...글제목];
-        copy[0] = '여자 코트 추천';
-        글제목변경(copy)
-      }}>글수정</button>
+      <div style={{marginTop: "20px", display: "flex", gap: "10px", justifyContent: "center"}}>
+        <button onClick={()=>{
+          let copy = [...글제목];
+          copy.sort((a, b)=> a.localeCompare(b))
+          글제목변경(copy)
+        }}>가나다순 정렬</button>
+        <button onClick={()=>{
+          let copy = [...글제목];
+          copy[0] = '여자 코트 추천';
+          글제목변경(copy)
+        }}>글수정</button>
+      </div>
 
       {글제목.map((title, i) => (
         <div className="list" key={i}>
-          <h4 onClick={()=>{ setModal(!modal) }}
-          style={{"cursor": "pointer"}}>{title} <span onClick={()=>{
-            let copy = [...따봉];
-            copy[i] = copy[i]+1
-            따봉변경(copy)
-          }}>👍</span> {따봉[i]} </h4>
+          <h4 onClick={()=>{
+            setIndex(i)
+            setModal(!modal)
+            }}>
+          {title}
+            <span
+              onClick={()=>{
+                let copy = [...따봉];
+                copy[i] = copy[i]+1
+                따봉변경(copy)
+            }}> 👍</span> {따봉[i]} 
+          </h4>
           <p>2월 17일 발행</p>
         </div>
         ))
       }
 
       {
-        modal == true ? <Modal/> : null
+        modal == true ? <Modal color='skyblue' 글제목변경={글제목변경} index={index} 글제목={글제목}/> : null
       }
 
     </div>
   )
 }
 
-function Modal(){
+function Modal(props){
   return(
     // <></> fragment문법
-    <div className="modal">
-      <h4>제목</h4>
+    <div className="modal" style={{backgroundColor : props.color}}>
+      <h4>{props.글제목[props.index]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      <button onClick={()=>{
+        let copy = [...props.글제목];
+        copy[0] = '여자 코트 추천';
+        props.글제목변경(copy)
+      }}>글수정</button>
     </div>
   );
 }
