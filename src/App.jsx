@@ -112,10 +112,16 @@ function App() {
         입력값변경(e.target.value)
         }} />
       <button onClick={()=>{
-        let copy = 입력값;
-        let copy2 = [...글제목];
-        copy2.push(copy);
-        글제목변경(copy2);
+        if(입력값 == ''){
+          alert('값을 입력하세요');
+          return;
+        }
+        let copy = [...글제목];
+        let copy2 = [...따봉];
+        copy2.unshift(0);
+        copy.unshift(입력값);
+        글제목변경(copy);
+        따봉변경(copy2);
         입력값변경('');
       }}>글발행</button>
 
