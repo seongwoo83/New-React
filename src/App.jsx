@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css'
 
 function App() {
@@ -147,6 +147,27 @@ function Modal(props){
       }}>글수정</button>
     </div>
   );
+}
+
+
+// 과거 Class형 컴포넌트
+class Modal2 extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      name: "kim",
+      age: 20
+    }
+  }
+  render(){
+    return(
+      <div>안녕 {this.props}
+        <button onClick={()=>{
+          this.setState({age : 21})
+        }}>버튼</button>
+      </div>
+    )
+  }
 }
 
 
